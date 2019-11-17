@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models;
-using Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BussinessLogic.Implementations;
+using BussinessLogic.Interfaces;
 
 namespace DependencyInjection
 {
@@ -11,10 +7,13 @@ namespace DependencyInjection
     {
         public static void Initialize()
         {
+            /*
             using(var db = new ApplicationDbContext())
             {
                 db.Database.Migrate();
             }
+            */
+            AddSingleton<IMailLogic, IMAPLayerMailLogic>();
         }
     }
 }

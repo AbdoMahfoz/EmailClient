@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IMAPLayer
 {
-    public static class MailFactory
+    public static class MailServerFactory
     {
         private readonly static Dictionary<string, Type> Lookup = new Dictionary<string, Type>
         {

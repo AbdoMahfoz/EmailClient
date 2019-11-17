@@ -7,44 +7,43 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
-using IMAPLayer;
-using IMAPLayer.Models;
+using ViewModels;
 using DependencyInjection;
+using BussinessLogic.Interfaces;
 
-namespace EmailClient
+namespace Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IMailServer MailServer;
-        private readonly Dictionary<int, MailHeaderObject> Refs = new Dictionary<int, MailHeaderObject>();
+        private readonly IMailLogic MailLogic;
+        private readonly Dictionary<int, MailHeader> Refs = new Dictionary<int, MailHeader>();
         private const int MaxCharLength = 60;
         public MainWindow()
         {
+            DI.Initialize();
+            MailLogic = DI.Get<IMailLogic>();
             InitializeComponent();
-            //DI.Initialize();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoginDTO login = new LoginDTO();
-            LoginWindow window = new LoginWindow(login);
+            LoginWindow window = DI.Get<LoginWindow>();
             window.Show();
             window.Closed += async (e, h) =>
             {
-                MailServer = login.MailServer;
-                if (MailServer == null)
+                if (!MailLogic.IsAuthenticated)
                 {
                     Close();
                     return;
                 }
-                BoxTree.ItemsSource = await MailServer.GetMailTree();
+                BoxTree.ItemsSource = await MailLogic.GetMailBoxTree();
             };
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(MailServer != null) MailServer.Dispose();
+            if(MailLogic != null) MailLogic.Dispose();
         }
         private void ShowBrowser()
         {
@@ -57,8 +56,8 @@ namespace EmailClient
         {
             if(e.AddedItems.Count == 1)
             {
-                MailHeaderObject o = (MailHeaderObject)e.AddedItems[0];
-                var res = await MailServer.GetMail(o.Id);
+                MailHeader o = (MailHeader)e.AddedItems[0];
+                var res = await MailLogic.GetMail(o);
                 ShowBrowser();
                 if(res.TryGetValue("text/html", out string body))
                 {
@@ -87,15 +86,14 @@ namespace EmailClient
         }
         private async void BoxTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            MailNode n = (MailNode)e.NewValue;
+            MailBox n = (MailBox)e.NewValue;
             if (!n.IsSelectable) return;
-            ObservableCollection<MailHeaderObject> Mails = new ObservableCollection<MailHeaderObject>();
+            ObservableCollection<MailHeader> Mails = new ObservableCollection<MailHeader>();
             Refs.Clear();
             MailList.ItemsSource = Mails;
-            await MailServer.SelectMailBox(n.FullName);
-            foreach (var mail in (await MailServer.GetMails(50)).Reverse())
+            foreach (var mail in await MailLogic.GetMails(n))
             {
-                MailHeaderObject o = new MailHeaderObject
+                MailHeader o = new MailHeader
                 {
                     Id = mail.Id,
                     From = mail.From.Split('<')[0].Trim(),

@@ -1,15 +1,15 @@
 ﻿
 using System.Collections.Generic;
 
-namespace IMAPLayer.Models
+namespace ViewModels
 {
-    public class MailNode
+    public class MailBox
     {
         public string Name { get; set; }
         public string FullName { get; set; }
         public bool IsSelectable { get; set; }
-        public List<MailNode> Next { get; set; } = new List<MailNode>();
-        public MailNode(string Name, string FullName, bool IsSelectable) 
+        public List<MailBox> Next { get; set; } = new List<MailBox>();
+        public MailBox(string Name, string FullName, bool IsSelectable) 
         {
             this.Name = Name;
             this.FullName = FullName;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using IMAPLayer.Models;
+using ViewModels;
 
 namespace IMAPLayer.MailProviders
 {
@@ -235,19 +235,19 @@ namespace IMAPLayer.MailProviders
             }
             return res;
         }
-        public async Task<IEnumerable<MailHeaderObject>> GetMails(int count)
+        public async Task<IEnumerable<MailHeader>> GetMails(int Skip, int Take)
         {
             string[] output;
             if (MailCount == -1)
             {
-                output = await Command($"FETCH 1:{count} (FLAGS BODY[HEADER.FIELDS (Subject From)])");
+                output = await Command($"FETCH {Skip + 1}:{Skip + Take} (FLAGS BODY[HEADER.FIELDS (Subject From)])");
             }
             else
             {
-                output = await Command($"FETCH {MailCount - count}:{MailCount} (FLAGS BODY[HEADER.FIELDS (Subject From)])");
+                output = await Command($"FETCH {MailCount - Skip - Take + 1}:{MailCount - Skip} (FLAGS BODY[HEADER.FIELDS (Subject From)])");
             }
-            List<MailHeaderObject> res = new List<MailHeaderObject>();
-            MailHeaderObject o = new MailHeaderObject();
+            List<MailHeader> res = new List<MailHeader>();
+            MailHeader o = new MailHeader();
             bool idSet = false;
             bool readingSubject = false;
             bool readingFrom = false;
@@ -308,7 +308,7 @@ namespace IMAPLayer.MailProviders
                         }
                         o.From = o.From.Replace("\"", "");
                         res.Add(o);
-                        o = new MailHeaderObject();
+                        o = new MailHeader();
                     }
                     o.Id = int.Parse(s.Split(' ')[1]);
                     o.Seen = s.Contains("\\Seen");
@@ -324,15 +324,15 @@ namespace IMAPLayer.MailProviders
             }
             return res;
         }
-        public async Task<IEnumerable<MailNode>> GetMailTree()
+        public async Task<IEnumerable<MailBox>> GetMailTree()
         {
             string[] res = await Command($"LIST \"\" \"*\"");
-            Dictionary<string, MailNode> nodes = new Dictionary<string, MailNode>();
+            Dictionary<string, MailBox> nodes = new Dictionary<string, MailBox>();
             foreach(string s in res)
             {
                 if (s.StartsWith("* OK")) break;
                 string Element = s.Split('\"', StringSplitOptions.RemoveEmptyEntries)[^1];
-                nodes[Element] = new MailNode(Element.Substring(Element.LastIndexOf('/') + 1), Element, !s.Contains("\\Noselect"));
+                nodes[Element] = new MailBox(Element.Substring(Element.LastIndexOf('/') + 1), Element, !s.Contains("\\Noselect"));
             }
             foreach(var p in nodes)
             {
@@ -341,7 +341,7 @@ namespace IMAPLayer.MailProviders
                     nodes[p.Key.Substring(0, p.Key.LastIndexOf('/'))].Next.Add(p.Value);
                 }
             }
-            List<MailNode> resList = new List<MailNode>();
+            List<MailBox> resList = new List<MailBox>();
             foreach(var p in nodes)
             {
                 if (!p.Key.Contains('/')) resList.Add(p.Value);

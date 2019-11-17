@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailClient", "EmailClient\EmailClient.csproj", "{73C85406-3310-4F9A-ACF3-6C21BB284A87}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{044D7075-B458-4B1E-B38C-9E8D579ED042}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{044D7075-B458-4B1E-B38C-9E8D579ED042}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{D70A22F9-801E-4A85-9362-D6144F4DDD4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{62F3E42A-E734-49C4-A138-E4F4D06114BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMAPLayer", "IMAPLayer\IMAPLayer.csproj", "{3B627DB5-D1DC-4FF7-9D29-5B1D13D0B889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMAPLayer", "IMAPLayer\IMAPLayer.csproj", "{3B627DB5-D1DC-4FF7-9D29-5B1D13D0B889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BussinessLogic", "BussinessLogic\BussinessLogic.csproj", "{05BEB55A-CB13-4B21-83F7-C6F33CE79BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BussinessLogic", "BussinessLogic\BussinessLogic.csproj", "{05BEB55A-CB13-4B21-83F7-C6F33CE79BDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModels", "ViewModels\ViewModels.csproj", "{2870B9F4-BF2E-43B6-9E9E-01348EA9A191}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Views", "Views\Views.csproj", "{9F31398F-B8C1-431B-930E-A92259D80606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73C85406-3310-4F9A-ACF3-6C21BB284A87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73C85406-3310-4F9A-ACF3-6C21BB284A87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73C85406-3310-4F9A-ACF3-6C21BB284A87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73C85406-3310-4F9A-ACF3-6C21BB284A87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{044D7075-B458-4B1E-B38C-9E8D579ED042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{044D7075-B458-4B1E-B38C-9E8D579ED042}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{044D7075-B458-4B1E-B38C-9E8D579ED042}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +43,14 @@ Global
 		{05BEB55A-CB13-4B21-83F7-C6F33CE79BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05BEB55A-CB13-4B21-83F7-C6F33CE79BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05BEB55A-CB13-4B21-83F7-C6F33CE79BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2870B9F4-BF2E-43B6-9E9E-01348EA9A191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2870B9F4-BF2E-43B6-9E9E-01348EA9A191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2870B9F4-BF2E-43B6-9E9E-01348EA9A191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2870B9F4-BF2E-43B6-9E9E-01348EA9A191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F31398F-B8C1-431B-930E-A92259D80606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F31398F-B8C1-431B-930E-A92259D80606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F31398F-B8C1-431B-930E-A92259D80606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F31398F-B8C1-431B-930E-A92259D80606}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
