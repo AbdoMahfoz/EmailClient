@@ -54,7 +54,15 @@ namespace DependencyInjection
             {
                 if(o == null)
                 {
-                    object res = Create(SingletonTypes[t], parameters);
+                    object res;
+                    if (SingletonTypes[t].IsInterface || SingletonTypes[t].IsAbstract)
+                    {
+                        res = New(SingletonTypes[t], parameters);
+                    }
+                    else
+                    {
+                        res = Create(SingletonTypes[t], parameters);
+                    }
                     Singletons[t] = res;
                     return res;
                 }
@@ -66,9 +74,16 @@ namespace DependencyInjection
             }
             if (Transients.TryGetValue(t, out Type resType))
             {
-                return Create(resType, parameters);
+                if (resType.IsInterface || resType.IsAbstract)
+                {
+                    return New(resType, parameters);
+                }
+                else
+                {
+                    return Create(resType, parameters);
+                }
             }
-            if (t.IsInterface)
+            if (t.IsInterface || t.IsAbstract)
             {
                 return null;
             }

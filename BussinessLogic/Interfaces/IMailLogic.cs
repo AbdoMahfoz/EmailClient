@@ -11,7 +11,10 @@ namespace BussinessLogic.Interfaces
         bool IsAuthenticated { get; }
         Task<LoginResult> Login(string Email, string Password, string IMAPServer = null, int? IMAPPort = null, bool? SSL = null);
         Task<IEnumerable<MailBox>> GetMailBoxTree();
+        Task SelectMailBox(MailBox MailBox);
+        Task<MailBox> GetAllMailBox();
+        Task<MailBox> GetSpamMailBox();
         Task<IEnumerable<MailHeader>> GetMails(MailBox MailBox, int Skip = 0, int Take = 50);
-        Task<Dictionary<string, string>> GetMail(MailHeader Mail);
+        Task<Mail> GetMail(MailHeader Mail);
     }
 }

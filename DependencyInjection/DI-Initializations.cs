@@ -1,4 +1,6 @@
 ﻿using BussinessLogic.Implementations;
+using BussinessLogic.Implementations.MailClassifiers;
+using BussinessLogic.Implementations.MailClassifiers.AlgorithmicClassifiers;
 using BussinessLogic.Interfaces;
 
 namespace DependencyInjection
@@ -7,13 +9,12 @@ namespace DependencyInjection
     {
         public static void Initialize()
         {
-            /*
-            using(var db = new ApplicationDbContext())
-            {
-                db.Database.Migrate();
-            }
-            */
             AddSingleton<IMailLogic, IMAPLayerMailLogic>();
+            AddTransient<IMailClassifier, SpamClassifier>();
+            AddTransient<BankingClassifier, AlgorithmicBankingClassifier>();
+            AddTransient<SpamClassifier, AlgorithmicSpamClassifier>();
+            AddTransient<UpdatesClassifier, AlgorithmicUpdatesClassifier>();
+            AddTransient<PromotionsClassifier, AlgorithmicPromotionClassifier>();
         }
     }
 }

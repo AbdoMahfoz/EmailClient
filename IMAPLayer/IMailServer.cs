@@ -12,6 +12,6 @@ namespace IMAPLayer
         Task<IEnumerable<MailBox>> GetMailTree();
         Task<bool> SelectMailBox(string MailBox);
         Task<IEnumerable<MailHeader>> GetMails(int Skip, int Take);
-        Task<Dictionary<string, string>> GetMail(int Id);
+        Task<(Dictionary<string, string>, Dictionary<string, byte[]>)> GetMail(int Id);
     }
 }
