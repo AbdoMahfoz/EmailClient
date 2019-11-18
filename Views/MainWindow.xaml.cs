@@ -158,8 +158,12 @@ namespace Views
         private void AttachmentDownloadButton_Click(object sender, RoutedEventArgs e)
         {
             string key = AttachmentsBox.Text;
-            File.WriteAllBytes(key, CurrentMail.Attachments[key]);
-            MessageBox.Show("File saved successfully");
+            if(!Directory.Exists("Attachments"))
+            {
+                Directory.CreateDirectory("Attachments");
+            }
+            File.WriteAllBytes($"Attachments\\{key}", CurrentMail.Attachments[key]);
+            MessageBox.Show($"File saved successfully to {Directory.GetCurrentDirectory()}\\Attachments\\{key}");
         }
     }
 }

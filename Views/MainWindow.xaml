@@ -15,7 +15,7 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Background="DarkGray">
-            <TreeView Background="DarkGray" SelectedItemChanged="BoxTree_SelectedItemChanged" x:Name="BoxTree">
+            <TreeView Background="DarkGray" BorderBrush="DarkGray" SelectedItemChanged="BoxTree_SelectedItemChanged" x:Name="BoxTree">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type vm:MailBox}" ItemsSource="{Binding Next}">
                         <TextBlock FontSize="16" Text="{Binding Name}"/>
