@@ -32,6 +32,28 @@ namespace IMAPLayer.MailProviders
                 string name = "";
                 string curKey = "";
                 List<byte> over = new List<byte>();
+                void DigestContent(StringBuilder Content)
+                {
+                    if (isAttachment)
+                    {
+                        if (isBinary)
+                        {
+                            attchDic[name] = Convert.FromBase64String(Content.ToString());
+                        }
+                        else
+                        {
+                            attchDic[name] = Encoding.UTF8.GetBytes(Content.ToString());
+                        }
+                        isAttachment = false;
+                    }
+                    else
+                    {
+                        outDic[curKey] = Content.ToString();
+                    }
+                    Content.Clear();
+                    isQuotedPrintable = false;
+                    isBinary = false;
+                }
                 void ExtractArgs(string s)
                 {
                     string[] attributes = s.Split(';', StringSplitOptions.RemoveEmptyEntries);
@@ -52,6 +74,8 @@ namespace IMAPLayer.MailProviders
                             if (args[1].Trim() == "multipart/alternative")
                             {
                                 multivalue = true;
+                                boundaryHit = false;
+                                InBoundaryArea = false;
                             }
                             else
                             {
@@ -132,9 +156,11 @@ namespace IMAPLayer.MailProviders
                                 {
                                     break;
                                 }
-                                InBoundaryArea = false;
-                                boundaryHit = false;
-                                multivalue = false;
+                                if(Content.Length > 0)
+                                {
+                                    DigestContent(Content);
+                                }
+                                boundaryHit = true;
                                 EnteringMixed = false;
                                 continue;
                             }
@@ -146,25 +172,7 @@ namespace IMAPLayer.MailProviders
                                 boundaryHit = true;
                                 if (InContentArea)
                                 {
-                                    if (isAttachment)
-                                    {
-                                        if(isBinary)
-                                        {
-                                            attchDic[name] = Convert.FromBase64String(Content.ToString());
-                                        }
-                                        else
-                                        {
-                                            attchDic[name] = Encoding.UTF8.GetBytes(Content.ToString());
-                                        }
-                                        isAttachment = false;
-                                    }
-                                    else
-                                    {
-                                        outDic[curKey] = Content.ToString();
-                                    }
-                                    Content.Clear();
-                                    isQuotedPrintable = false;
-                                    isBinary = false;
+                                    DigestContent(Content);
                                 }
                                 if(s.Trim().StartsWith($"--{boundary}--"))
                                 {
@@ -174,7 +182,7 @@ namespace IMAPLayer.MailProviders
                                         InBoundaryArea = true;
                                         boundaryHit = false;
                                         InContentArea = false;
-                                        EnteringMixed = true;
+                                        EnteringMixed = false;
                                     }
                                     else
                                     {
@@ -206,22 +214,7 @@ namespace IMAPLayer.MailProviders
                 if (!multivalue)
                 {
                     if (Content[Content.Length - 1] == ')') Content.Remove(Content.Length - 1, 1);
-                    if (isAttachment)
-                    {
-                        if (isBinary)
-                        {
-                            attchDic[name] = Convert.FromBase64String(Content.ToString());
-                        }
-                        else
-                        {
-                            attchDic[name] = Encoding.UTF8.GetBytes(Content.ToString());
-                        }
-                        isAttachment = false;
-                    }
-                    else
-                    {
-                        outDic[curKey] = Content.ToString();
-                    }
+                    DigestContent(Content);
                 }
             });
             return (outDic, attchDic);
